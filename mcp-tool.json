@@ -1,0 +1,29 @@
+{
+  "name": "file-tool",
+  "description": "Interact with files on the local machine",
+  "schema_version": "v1",
+  "tools": [
+    {
+      "name": "list_files",
+      "description": "List text files in a directory",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "directory": { "type": "string" }
+        },
+        "required": ["directory"]
+      }
+    },
+    {
+      "name": "read_and_summarize",
+      "description": "Summarize the contents of a file",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "filepath": { "type": "string" }
+        },
+        "required": ["filepath"]
+      }
+    }
+  ]
+}

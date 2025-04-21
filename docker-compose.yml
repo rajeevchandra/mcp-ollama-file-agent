@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  mcp-server:
+    build: .
+    ports:
+      - "3333:3333"
+    volumes:
+      - ./docs:/app/docs
+    networks:
+      - mcpnet
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3333/docs"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  streamlit:
+    image: python:3.11-slim
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: sh -c "pip install streamlit requests && streamlit run streamlit_app.py"
+    ports:
+      - "8501:8501"
+    networks:
+      - mcpnet
+
+  agent-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile.agent
+    depends_on:
+      mcp-server:
+        condition: service_healthy
+    volumes:
+      - ./docs:/app/docs
+    networks:
+      - mcpnet
+
+networks:
+  mcpnet:
